@@ -1,4 +1,4 @@
-from CleaningData import clean_value
+from CleaningData import normal
 import math
 
 def BubbleSort(array, col_index):
@@ -6,7 +6,7 @@ def BubbleSort(array, col_index):
     for i in range(n):
         swapped = False
         for j in range(0, n - i - 1):
-            if clean_value(array[j][col_index],col_index) > clean_value(array[j + 1][col_index],col_index):
+            if normal(array[j][col_index],col_index) > normal(array[j + 1][col_index],col_index):
                 array[j], array[j + 1] = array[j + 1], array[j]
                 swapped = True
         
@@ -16,10 +16,10 @@ def BubbleSort(array, col_index):
                 
 def InsertionSort(array, col_index):
     for i in range(1, len(array)):
-        key_row = clean_value(array[i],col_index)
+        key_row = normal(array[i],col_index)
         key_value = key_row[col_index]  
         j = i - 1
-        while j >= 0 and clean_value(array[j][col_index],col_index) > key_value:
+        while j >= 0 and normal(array[j][col_index],col_index) > key_value:
             array[j + 1] = array[j]
             j -= 1
         array[j + 1] = key_row
@@ -29,7 +29,7 @@ def SelectionSort(array, col_index):
     for i in range(len(array)):
         min_index = i
         for j in range(i + 1, len(array)):
-            if clean_value(array[j][col_index]) < clean_value(array[min_index][col_index]):
+            if normal(array[j][col_index]) < normal(array[min_index][col_index]):
                 min_index = j
         array[i], array[min_index] = array[min_index], array[i]
     return array
@@ -43,7 +43,7 @@ def MergeSort(array, col_index):
         MergeSort(right, col_index)
         i = j = k = 0
         while i < len(left) and j < len(right):
-            if clean_value(left[i][col_index],col_index) < clean_value(right[j][col_index],col_index):
+            if normal(left[i][col_index],col_index) < normal(right[j][col_index],col_index):
                 array[k] = left[i]
                 i += 1
             else:
@@ -65,13 +65,13 @@ def QuickSort(array, col_index):
         return array
     else:
         pivot = array[0]  
-        less = [row for row in array[1:] if clean_value(row[col_index],col_index) < clean_value(pivot[col_index],col_index)]  
-        greater = [row for row in array[1:] if clean_value(row[col_index],col_index) >= clean_value(pivot[col_index],col_index)]  
+        less = [row for row in array[1:] if normal(row[col_index],col_index) < normal(pivot[col_index],col_index)]  
+        greater = [row for row in array[1:] if normal(row[col_index],col_index) >= normal(pivot[col_index],col_index)]  
 
         return QuickSort(less, col_index) + [pivot] + QuickSort(greater, col_index)
 
 def CountingSort(array, col_index):
-    cleaned_values = [clean_value(item[col_index], col_index) for item in array]
+    cleaned_values = [normal(item[col_index], col_index) for item in array]
     max_value = max(cleaned_values)
     
     length_array = len(array)
@@ -82,14 +82,14 @@ def CountingSort(array, col_index):
     output_array = [0] * length_array
 
     for value in array:
-        index = int(clean_value(value[col_index], col_index)) 
+        index = int(normal(value[col_index], col_index)) 
         counting_array[index] += 1
 
     for i in range(1, len(counting_array)):
         counting_array[i] += counting_array[i - 1]
 
     for value in reversed(array):  
-        index = int(clean_value(value[col_index], col_index))
+        index = int(normal(value[col_index], col_index))
         output_array[counting_array[index] - 1] = value
         counting_array[index] -= 1
 
@@ -106,14 +106,14 @@ def RadixCountSort(array, exp, column):
     count = [0] * 20  
 
     for i in range(n):
-        index = int(clean_value(array[i][column], column)) // exp
+        index = int(normal(array[i][column], column)) // exp
         count[index % 10 + 10] += 1  
 
     for i in range(1, len(count)):
         count[i] += count[i - 1]
 
     for i in range(n - 1, -1, -1):
-        index = int(clean_value(array[i][column], column)) // exp
+        index = int(normal(array[i][column], column)) // exp
         output[count[index % 10 + 10] - 1] = array[i]
         count[index % 10 + 10] -= 1
 
@@ -122,7 +122,7 @@ def RadixCountSort(array, exp, column):
 
 
 def RadixSort(array, column):
-    max_value = int(max(clean_value(item[column], column) for item in array))
+    max_value = int(max(normal(item[column], column) for item in array))
 
     exp = 1
     while max_value // exp > 0:
@@ -133,7 +133,7 @@ def RadixSort(array, column):
 
 
 def BucketSort(array, col_index):
-    cleaned_values = [clean_value(row[col_index], col_index) for row in array]
+    cleaned_values = [normal(row[col_index], col_index) for row in array]
     min_val = min(cleaned_values)
     max_val = max(cleaned_values)
     size = len(array)
@@ -143,7 +143,7 @@ def BucketSort(array, col_index):
     buckets = [[] for _ in range(size)]
 
     for row in array:
-        normalized_value = (clean_value(row[col_index], col_index) - min_val) / (range_of_values + 1)
+        normalized_value = (normal(row[col_index], col_index) - min_val) / (range_of_values + 1)
         index = math.floor(normalized_value * size)
         buckets[index].append(row)
 

@@ -1,43 +1,57 @@
 import math
-def clean_value(value, column):
+def normal (value, column):
     if(column==0):
-        try:
-            cleaned_value = float(value.replace('Rs.', '').replace(',', '').strip())
-            cleaned_value *= 100
-        except ValueError:
-            cleaned_value = 0.0  
-        return cleaned_value
+        if isinstance (value,str):
+            try:
+                normal_value = float(value.replace('Rs.', '').replace(',', '').strip())
+                normal_value *= 100
+            except ValueError:
+                normal_value = 0.0  
+        else:
+            normal_value = 0
+        return normal_value
     elif (column==1):
-        try:
-            if (value=='No discount'):
-                cleaned_value = 0
-            else:
-                cleaned_value = float(value.replace('%', '').replace('Off', '').strip())
-        except ValueError:
-            cleaned_value = 0.0  
-        return cleaned_value
+        if isinstance (value,str):
+            try:
+                if (value=='No discount'):
+                    normal_value = 0
+                else:
+                    normal_value = float(value.replace('%', '').replace('Off', '').strip())
+            except ValueError:
+                normal_value = 0.0
+        else:
+            normal_value = 0
+        return normal_value
     elif (column==2):
-        cleaned_value = value.replace('sold', '').strip()
-    
-        try:
-            if value=='No rating':
-                cleaned_value=0
-            elif cleaned_value.endswith('K'):
-                cleaned_value = float(cleaned_value[:-1]) * 1000  
-            else:
-                cleaned_value = float(cleaned_value)
-        except ValueError:
-            cleaned_value = 0.0
-        cleaned_value = math.floor(cleaned_value)
-        return cleaned_value
+        
+        normal_value = value
+        if isinstance(normal_value,str):
+            try:
+                if value=='No rating':
+                    normal_value=0
+                elif normal_value.endswith('K'):
+                    normal_value = float(normal_value[:-1]) * 1000  
+                else:
+                    normal_value = float(normal_value)
+            except ValueError:
+                normal_value = 0.0
+            normal_value = math.floor(normal_value)
+        
+        return normal_value
     elif (column==3):
-        try:
-            if (value=='Not sold'):
-                cleaned_value = 0
-            else:
-                cleaned_value = int(value)
-        except ValueError:
-            cleaned_value = 0.0  
-        return cleaned_value
+        if isinstance (value,str):
+            try:
+                if (value=='Not sold'):
+                    normal_value = 0
+                else:
+                    normal_value = value.replace('sold', '').strip()
+                    if normal_value.endswith('K'):
+                        normal_value = float(normal_value[:-1]) * 1000  
+                    normal_value = float(normal_value)
+            except ValueError:
+                normal_value = 0.0  
+        else:
+            normal_value = value
+        return normal_value
     else:
         return value
